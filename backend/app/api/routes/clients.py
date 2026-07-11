@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.api.routes.auth import get_current_user
 from app.db import get_db
 from app.models import Client, User
-from app.schemas import ClientCreate, ClientOut
+from app.schemas.client import ClientCreate, ClientOut
 
 router = APIRouter()
 
