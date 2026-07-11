@@ -6,12 +6,12 @@ from sqlalchemy.orm import Session
 from app.api.routes.auth import get_current_user
 from app.db import get_db
 from app.models import Client, User
-from app.schemas.client import ClientCreate, ClientOut
+from app.schemas.client import ClientCreate, ClientRead
 
 router = APIRouter()
 
 
-@router.get("", response_model=list[ClientOut])
+@router.get("", response_model=list[ClientRead])
 def list_clients(
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
@@ -24,7 +24,7 @@ def list_clients(
     )
 
 
-@router.post("", response_model=ClientOut)
+@router.post("", response_model=ClientRead)
 def create_client(
     client: ClientCreate,
     db: Annotated[Session, Depends(get_db)],

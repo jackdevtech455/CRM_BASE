@@ -6,18 +6,23 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 
 class ClientBase(BaseModel):
     name: str
-    contact_name: str
     email: EmailStr
     phone: Optional[str] = None
-    status: Optional[str] = "Active"
 
 
 class ClientCreate(ClientBase):
     pass
 
 
-class ClientOut(ClientBase):
-    id: int
-    created_at: datetime
+class ClientUpdate(BaseModel):
+    name: str | None = None
+    email: EmailStr | None = None
+    phone: str | None = None
 
+
+class ClientRead(ClientBase):
     model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    owner_id: int
+    created_at: datetime
