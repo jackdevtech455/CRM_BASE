@@ -7,7 +7,9 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 class ClientBase(BaseModel):
     name: str
     email: EmailStr
+    contact_name: str
     phone: Optional[str] = None
+    status: Optional[str] = "Active"
 
 
 class ClientCreate(ClientBase):
