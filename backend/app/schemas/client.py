@@ -19,6 +19,8 @@ class ClientCreate(ClientBase):
 class ClientUpdate(BaseModel):
     name: str | None = None
     email: EmailStr | None = None
+    contact_name: str | None = None
+    status: str | None = None
     phone: str | None = None
 
 
