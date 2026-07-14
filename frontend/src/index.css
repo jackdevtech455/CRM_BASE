@@ -1,8 +1,16 @@
-* {
-  box-sizing: border-box;
+header {
+  display: flex;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ddd;
 }
 
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
+nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+main {
+  padding: 2rem;
 }

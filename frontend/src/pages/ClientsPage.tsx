@@ -17,6 +17,7 @@ import {
 import type {
     Client,
     ClientCreate,
+    ClientUpdate
 } from "../types/client";
 
 type ClientFormData = {
@@ -64,7 +65,7 @@ export default function ClientsPage() {
             data,
         }: {
             clientId: number;
-            data: ClientCreate;
+            data: ClientUpdate;
         }) => updateClient(clientId, data),
 
         onSuccess: async () => {

@@ -1,32 +1,21 @@
-import { type FormEvent, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { ApiError } from "../api/client";
-import { useAuth } from "../auth/useAuth";
-
-type LocationState = {
-    from?: {
-        pathname: string;
-    };
-};
+import { useAuth } from "../auth/AuthProvider";
 
 export default function LoginPage() {
-    const [email, setEmail] = useState("jack@hotmail.com");
-    const [password, setPassword] = useState("hello");
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const { login, isAuthenticated, isLoading } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
+    const { login } = useAuth();
 
-    const locationState = location.state as LocationState | null;
-    const destination = locationState?.from?.pathname ?? "/";
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        setErrorMessage(null);
+        setError(null);
         setIsSubmitting(true);
 
         try {
@@ -35,24 +24,14 @@ export default function LoginPage() {
                 password,
             });
 
-            navigate(destination, { replace: true });
+            navigate("/", { replace: true });
         } catch (error) {
-            if (error instanceof ApiError) {
-                setErrorMessage(error.message);
-            } else {
-                setErrorMessage("Unable to log in. Please try again.");
-            }
+            setError(
+                error instanceof Error ? error.message : "Unable to log in",
+            );
         } finally {
             setIsSubmitting(false);
         }
-    }
-
-    if (isLoading) {
-        return <p>Checking session...</p>;
-    }
-
-    if (isAuthenticated) {
-        return <Navigate to="/" replace />;
     }
 
     return (
@@ -60,35 +39,27 @@ export default function LoginPage() {
             <h1>Log in</h1>
 
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email</label>
-
+                <label>
+                    Email
                     <input
-                        id="email"
-                        name="email"
                         type="email"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
-                        autoComplete="email"
                         required
                     />
-                </div>
+                </label>
 
-                <div>
-                    <label htmlFor="password">Password</label>
-
+                <label>
+                    Password
                     <input
-                        id="password"
-                        name="password"
                         type="password"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
-                        autoComplete="current-password"
                         required
                     />
-                </div>
+                </label>
 
-                {errorMessage && <p role="alert">{errorMessage}</p>}
+                {error && <p role="alert">{error}</p>}
 
                 <button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? "Logging in..." : "Log in"}
