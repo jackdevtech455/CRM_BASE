@@ -1,13 +1,17 @@
+from typing import TYPE_CHECKING
+
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
-from app.api.dependencies import DatabaseDependency
 from app.auth.dependencies import OAuth2SchemeDependency
 from app.core.security.passwords import verify_password
 from app.core.settings import get_settings
 from app.models.user import User
 from app.schemas.token import TokenData
+
+if TYPE_CHECKING:
+    from app.api.dependencies import DatabaseDependency
 
 settings = get_settings()
 
