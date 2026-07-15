@@ -10,7 +10,7 @@ COPY --from=ghcr.io/astral-sh/uv:0.9.2 /uv /bin/
 COPY /app/ /app/app/
 COPY /.python-version /app/.python-version
 COPY /pyproject.toml /app/pyproject.toml
-COPY /.env /app/.env
+COPY /.env.example /app/.env
 
 RUN uv sync
 
