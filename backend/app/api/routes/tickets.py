@@ -11,7 +11,8 @@ DELETE  /api/tickets/{ticket_id}: Delete a specific ticket by ID for the current
 from fastapi import APIRouter, HTTPException, Response, status
 from sqlalchemy import select
 
-from app.api.dependencies import CurrentUserDependency, DatabaseDependency
+from app.api.dependencies import CurrentUserDependency
+from app.db.dependencies import DatabaseDependency
 from app.models.ticket import Ticket
 from app.schemas.ticket import TicketCreate, TicketRead, TicketUpdate
 

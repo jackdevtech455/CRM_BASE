@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.auth.dependencies import AccessTokenDependency
 from app.core.security.passwords import verify_password
 from app.core.settings import get_settings
+from app.db.dependencies import DatabaseDependency
 from app.models.user import User
 from app.schemas.token import TokenData
 
@@ -29,7 +30,7 @@ def authenticate_user(
 
 def get_current_user(
     token: AccessTokenDependency,
-    db: Session,
+    db: DatabaseDependency,
 ) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
