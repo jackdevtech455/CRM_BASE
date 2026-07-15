@@ -12,7 +12,6 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
-from pwdlib import PasswordHash
 from sqlalchemy.orm import Session
 
 from app.api.types import CurrentUserDependency, DatabaseDependency
@@ -30,21 +29,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 OAuth2SchemeDependency = Annotated[str, Depends(oauth2_scheme)]
 OAuth2PasswordRequestFormDependency = Annotated[OAuth2PasswordRequestForm, Depends()]
-
-password_hash = PasswordHash.recommended()
-
-
-def get_password_hash(
-    password: str,
-) -> str:
-    return password_hash.hash(password)
-
-
-def verify_password(
-    plain_password: str,
-    hashed_password: str,
-) -> bool:
-    return password_hash.verify(plain_password, hashed_password)
 
 
 def create_access_token(
