@@ -11,7 +11,7 @@ DELETE  /api/clients/{client_id}: Delete a specific client by ID for the current
 from fastapi import APIRouter, HTTPException, Response, status
 from sqlalchemy import select
 
-from app.api.routes._types import CurrentUserDependency, DatabaseDependency
+from app.api.types import CurrentUserDependency, DatabaseDependency
 from app.models import Client
 from app.schemas.client import ClientCreate, ClientRead, ClientUpdate
 

@@ -6,7 +6,7 @@ GET     /api/dashboard: Get dashboard stats for the current user
 
 from fastapi import APIRouter
 
-from app.api.routes._types import CurrentUserDependency, DatabaseDependency
+from app.api.types import CurrentUserDependency, DatabaseDependency
 from app.models import Client, Ticket
 
 router = APIRouter()

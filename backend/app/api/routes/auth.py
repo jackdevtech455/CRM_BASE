@@ -15,7 +15,7 @@ from jose import JWTError, jwt
 from pwdlib import PasswordHash
 from sqlalchemy.orm import Session
 
-from app.api.routes._types import CurrentUserDependency, DatabaseDependency
+from app.api.types import CurrentUserDependency, DatabaseDependency
 from app.models import User
 from app.schemas.token import Token, TokenData
 from app.schemas.user import UserCreate, UserRead
