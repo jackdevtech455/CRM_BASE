@@ -1,17 +1,12 @@
-from typing import TYPE_CHECKING
-
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
-from app.auth.dependencies import OAuth2SchemeDependency
+from app.auth.dependencies import AccessTokenDependency
 from app.core.security.passwords import verify_password
 from app.core.settings import get_settings
 from app.models.user import User
 from app.schemas.token import TokenData
-
-if TYPE_CHECKING:
-    from app.api.dependencies import DatabaseDependency
 
 settings = get_settings()
 
@@ -33,8 +28,8 @@ def authenticate_user(
 
 
 def get_current_user(
-    token: OAuth2SchemeDependency,
-    db: DatabaseDependency,
+    token: AccessTokenDependency,
+    db: Session,
 ) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
