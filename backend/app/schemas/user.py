@@ -12,7 +12,7 @@ class UserCreate(UserBase):
     password: str
 
 
-class UserOut(UserBase):
+class UserRead(UserBase):
     id: int
     created_at: datetime
 

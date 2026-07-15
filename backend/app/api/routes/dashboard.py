@@ -1,19 +1,15 @@
-from typing import Annotated
+from fastapi import APIRouter
 
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-
-from app.api.routes.auth import get_current_user
-from app.db import get_db
-from app.models import Client, Ticket, User
+from app.api.routes._types import CurrentUserDependency, DatabaseDependency
+from app.models import Client, Ticket
 
 router = APIRouter()
 
 
 @router.get("")
 def dashboard_stats(
-    db: Annotated[Session, Depends(get_db)],
-    current_user: Annotated[User, Depends(get_current_user)],
+    db: DatabaseDependency,
+    current_user: CurrentUserDependency,
 ):
     clients = db.query(Client).filter(Client.owner_id == current_user.id).count()
     tickets = db.query(Ticket).filter(Ticket.owner_id == current_user.id).count()

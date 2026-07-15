@@ -1,19 +1,11 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, Response, status
 from sqlalchemy import select
-from sqlalchemy.orm import Session
 
-from app.api.routes.auth import get_current_user
-from app.db import get_db
-from app.models import Client, User
+from app.api.routes._types import CurrentUserDependency, DatabaseDependency
+from app.models import Client
 from app.schemas.client import ClientCreate, ClientRead, ClientUpdate
 
 router = APIRouter(tags=["clients"])
-
-
-DatabaseDependency = Annotated[Session, Depends(get_db)]
-CurrentUserDependency = Annotated[User, Depends(get_current_user)]
 
 
 @router.get("", response_model=list[ClientRead])

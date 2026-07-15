@@ -1,7 +1,7 @@
 [project]
 name = "backend"
 version = "0.1.0"
-description = "Add your description here"
+description = "FastAPI backend for CRM_Template"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

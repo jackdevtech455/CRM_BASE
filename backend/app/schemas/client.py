@@ -16,17 +16,17 @@ class ClientCreate(ClientBase):
     pass
 
 
-class ClientUpdate(BaseModel):
-    name: str | None = None
-    email: EmailStr | None = None
-    contact_name: str | None = None
-    status: str | None = None
-    phone: str | None = None
-
-
 class ClientRead(ClientBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
     owner_id: int
     created_at: datetime
+
+
+class ClientUpdate(BaseModel):
+    name: str | None = None
+    email: EmailStr | None = None
+    contact_name: str | None = None
+    status: str | None = None
+    phone: str | None = None
