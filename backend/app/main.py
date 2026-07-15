@@ -12,7 +12,8 @@ Initializes the FastAPI app, sets up middleware, and includes API routes.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import auth, clients, dashboard, tickets
+from app.api.router import api_router
+from app.api.routes import auth
 from app.db.base import Base
 from app.db.session import engine
 
@@ -32,9 +33,7 @@ app.add_middleware(
 Base.metadata.create_all(bind=engine)  # TODO use alembic for migrations instead
 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
-app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
-app.include_router(clients.router, prefix="/api/clients", tags=["clients"])
-app.include_router(tickets.router, prefix="/api/tickets", tags=["tickets"])
+app.include_router(api_router, prefix="/api", tags=["api"])
 
 
 @app.get("/health")
