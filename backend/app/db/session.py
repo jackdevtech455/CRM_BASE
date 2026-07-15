@@ -1,7 +1,6 @@
 """
 Database connection and session management.
 
-Base: The declarative base class for SQLAlchemy models.
 get_db: Dependency that provides a database session for each request.
 """
 

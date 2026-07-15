@@ -1,3 +1,7 @@
+"""
+User authentication and retrieval functions.
+"""
+
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session

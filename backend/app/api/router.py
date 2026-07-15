@@ -1,3 +1,7 @@
+"""
+API routes mounted at /api.
+"""
+
 from fastapi import APIRouter
 
 from app.api.routes import clients, dashboard, tickets

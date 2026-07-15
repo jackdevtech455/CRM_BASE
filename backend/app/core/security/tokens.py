@@ -1,3 +1,7 @@
+"""
+Token creation and management utilities.
+"""
+
 from datetime import datetime, timedelta, timezone
 
 from jose import jwt

@@ -1,5 +1,5 @@
 """
-Shared dependencies for use in routes.
+Shared routing dependencies.
 """
 
 from typing import Annotated
