@@ -59,18 +59,21 @@ def register_user(
 def login(
     form_data: OAuth2PasswordRequestFormDependency,
     db: DatabaseDependency,
-) -> dict[str, str]:  # TODO change to Token?
+) -> Token:  # TODO change to Token?
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect email or password")
 
     access_token = create_access_token(data={"sub": user.email})
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+    )
 
 
 @router.get("/me", response_model=UserRead)
 def get_me(
     current_user: CurrentUserDependency,
-) -> CurrentUserDependency:  # TODO change to User?
+) -> User:
     return current_user
