@@ -6,21 +6,18 @@ get_db: Dependency that provides a database session for each request.
 """
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeMeta, declarative_base, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
-from app.settings import get_settings
+from app.core.settings import get_settings
 
 settings = get_settings()
 
-engine = create_engine(settings.DATABASE_URL)
+engine = create_engine(settings.database.url)
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
     bind=engine,
 )
-
-# TODO change to using DeclarativeBase from sqlalchemy.orm
-Base: DeclarativeMeta = declarative_base()
 
 
 def get_db():

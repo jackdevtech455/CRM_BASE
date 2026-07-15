@@ -13,7 +13,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import auth, clients, dashboard, tickets
-from app.db import Base, engine
+from app.db.base import Base
+from app.db.session import engine
 
 app = FastAPI(
     title="CRM Backend",
