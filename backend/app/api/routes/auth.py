@@ -6,13 +6,10 @@ POST    /login: Login and get an access token
 GET     /me: Get the current logged-in user
 """
 
-from typing import Annotated
-
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import APIRouter, HTTPException
 
 from app.api.dependencies import CurrentUserDependency, DatabaseDependency
-from app.auth.users import authenticate_user
+from app.auth.users import OAuth2PasswordRequestFormDependency, authenticate_user
 from app.core.security.passwords import get_password_hash
 from app.core.security.tokens import create_access_token
 from app.core.settings import get_settings
@@ -23,12 +20,6 @@ from app.schemas.user import UserCreate, UserRead
 router = APIRouter()
 
 settings = get_settings()
-
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
-
-OAuth2SchemeDependency = Annotated[str, Depends(oauth2_scheme)]
-OAuth2PasswordRequestFormDependency = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 
 @router.post("/register", response_model=UserRead)
