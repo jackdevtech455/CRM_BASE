@@ -1,25 +1,15 @@
-from typing import TYPE_CHECKING, Annotated
-
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import HTTPException, status
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
+from app.api.dependencies import DatabaseDependency
+from app.auth.dependencies import OAuth2SchemeDependency
 from app.core.security.passwords import verify_password
 from app.core.settings import get_settings
 from app.models.user import User
 from app.schemas.token import TokenData
 
-if TYPE_CHECKING:
-    from app.api.dependencies import DatabaseDependency
-
 settings = get_settings()
-
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
-
-OAuth2SchemeDependency = Annotated[str, Depends(oauth2_scheme)]
-OAuth2PasswordRequestFormDependency = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 
 def authenticate_user(

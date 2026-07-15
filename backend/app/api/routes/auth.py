@@ -9,7 +9,8 @@ GET     /me: Get the current logged-in user
 from fastapi import APIRouter, HTTPException
 
 from app.api.dependencies import CurrentUserDependency, DatabaseDependency
-from app.auth.users import OAuth2PasswordRequestFormDependency, authenticate_user
+from app.auth.dependencies import OAuth2PasswordRequestFormDependency
+from app.auth.users import authenticate_user
 from app.core.security.passwords import get_password_hash
 from app.core.security.tokens import create_access_token
 from app.core.settings import get_settings
