@@ -1,3 +1,13 @@
+"""
+Ticket routes mounted at /api/tickets.
+
+GET     /api/tickets: Get a list of tickets for the current user
+GET     /api/tickets/{ticket_id}: Get a specific ticket by ID for the current user
+POST    /api/tickets: Create a new ticket for the current user
+PATCH   /api/tickets/{ticket_id}: Update a specific ticket by ID for the current user
+DELETE  /api/tickets/{ticket_id}: Delete a specific ticket by ID for the current user
+"""
+
 from fastapi import APIRouter, HTTPException, Response, status
 from sqlalchemy import select
 

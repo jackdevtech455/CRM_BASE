@@ -1,3 +1,10 @@
+"""
+Schemas for the User model.
+
+UserCreate: Schema for creating a new user.
+UserRead: Schema for reading user data.
+"""
+
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr

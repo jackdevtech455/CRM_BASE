@@ -1,4 +1,9 @@
-# TODO move these dependencies to a central location so they can be reused across the app
+"""
+Shared dependencies for use in routes.
+"""
+
+# TODO move these dependencies to a central location so they can be reused across the app,
+#   not just in routes
 
 from typing import Annotated
 

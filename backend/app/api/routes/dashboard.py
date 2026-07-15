@@ -1,3 +1,9 @@
+"""
+Dashboard routes mounted at /api/dashboard.
+
+GET     /api/dashboard: Get dashboard stats for the current user
+"""
+
 from fastapi import APIRouter
 
 from app.api.routes._types import CurrentUserDependency, DatabaseDependency

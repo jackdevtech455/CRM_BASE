@@ -1,3 +1,13 @@
+"""
+Client routes mounted at /api/clients.
+
+GET     /api/clients: Get a list of clients for the current user
+GET     /api/clients/{client_id}: Get a specific client by ID for the current user
+POST    /api/clients: Create a new client for the current user
+PATCH   /api/clients/{client_id}: Update a specific client by ID for the current user
+DELETE  /api/clients/{client_id}: Delete a specific client by ID for the current user
+"""
+
 from fastapi import APIRouter, HTTPException, Response, status
 from sqlalchemy import select
 

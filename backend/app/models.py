@@ -1,3 +1,7 @@
+"""
+SQLAlchemy models.
+"""
+
 from datetime import datetime
 
 from sqlalchemy import ForeignKey, String, Text, func

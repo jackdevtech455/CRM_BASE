@@ -1,3 +1,11 @@
+"""
+Schemas for the Client model.
+
+ClientCreate: Schema for creating a new client.
+ClientRead: Schema for reading client data.
+ClientUpdate: Schema for updating client data.
+"""
+
 from datetime import datetime
 from typing import Optional
 

@@ -1,5 +1,12 @@
+"""
+Database connection and session management.
+
+Base: The declarative base class for SQLAlchemy models.
+get_db: Dependency that provides a database session for each request.
+"""
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import DeclarativeMeta, declarative_base, sessionmaker
 
 from app.settings import get_settings
 
@@ -12,7 +19,8 @@ SessionLocal = sessionmaker(
     bind=engine,
 )
 
-Base = declarative_base()
+# TODO change to using DeclarativeBase from sqlalchemy.orm
+Base: DeclarativeMeta = declarative_base()
 
 
 def get_db():

@@ -1,3 +1,11 @@
+"""
+Schemas for the Ticket model.
+
+TicketCreate: Schema for creating a new ticket.
+TicketRead: Schema for reading ticket data.
+TicketUpdate: Schema for updating ticket data.
+"""
+
 from datetime import datetime
 from typing import Optional
 

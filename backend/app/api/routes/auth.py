@@ -1,3 +1,11 @@
+"""
+Authentication routes mounted at /auth.
+
+POST    /register: Register a new user
+POST    /login: Login and get an access token
+GET     /me: Get the current logged-in user
+"""
+
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
