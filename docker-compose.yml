@@ -20,6 +20,8 @@ services:
       DATABASE_URL: postgresql://crm:crm@db:5432/crm
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend/alembic/versions:/app/alembic/versions
     depends_on:
       - db
   frontend:
