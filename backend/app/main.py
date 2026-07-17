@@ -12,10 +12,8 @@ Initializes the FastAPI app, sets up middleware, and includes API routes.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.router import api_router
+from app.api.router import api_routers
 from app.api.routes import auth
-from app.db.base import Base
-from app.db.session import engine
 
 app = FastAPI(
     title="CRM Backend",
@@ -31,7 +29,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
-app.include_router(api_router, prefix="/api", tags=["api"])
+app.include_router(api_routers, prefix="/api", tags=["api"])
 
 
 @app.get("/health")
