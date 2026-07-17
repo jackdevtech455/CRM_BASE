@@ -30,8 +30,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-Base.metadata.create_all(bind=engine)  # TODO use alembic for migrations instead
-
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(api_router, prefix="/api", tags=["api"])
 
