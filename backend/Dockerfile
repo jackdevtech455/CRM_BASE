@@ -7,10 +7,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 COPY --from=ghcr.io/astral-sh/uv:0.9.2 /uv /bin/
 
+COPY /alembic/ /app/alembic/
 COPY /app/ /app/app/
-COPY /.python-version /app/.python-version
-COPY /pyproject.toml /app/pyproject.toml
 COPY /.env /app/.env
+COPY /.python-version /app/.python-version
+COPY /alembic.ini /app/alembic.ini
+COPY /pyproject.toml /app/pyproject.toml
 
 RUN uv sync
 
