@@ -9,8 +9,13 @@ import { router } from "./router";
 
 const queryClient = new QueryClient();
 
+const rootElement = document.getElementById("root");
 
-createRoot(document.getElementById("root")!).render(
+if (!rootElement) {
+  throw new Error('Element with id "root" was not found');
+}
+
+createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
