@@ -9,3 +9,5 @@
     [X] /login return Token
     [X] /me return User
 [X] move api routes from main out into /api/router.py
+[ ] update docs with install instructions from host>container and container>host
+[ ] add files to dockerignore and swap to using a bind mount instead of COPY
