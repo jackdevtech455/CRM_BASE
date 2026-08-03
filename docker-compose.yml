@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: db
+    container_name: crm-db
     environment:
       POSTGRES_DB: crm
       POSTGRES_USER: crm
@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
     container_name: crm-backend
     environment:
-      DATABASE_URL: postgresql://crm:crm@db:5432/crm
+      DATABASE_URL: postgresql://crm:crm@crm-db:5432/crm
     ports:
       - "8000:8000"
     volumes:
