@@ -52,7 +52,7 @@ def register_user(
 def login(
     form_data: OAuth2PasswordRequestFormDependency,
     db: DatabaseDependency,
-) -> Token:  # TODO change to Token?
+) -> Token:
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect email or password")
