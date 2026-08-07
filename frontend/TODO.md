@@ -3,7 +3,7 @@
 ## General
 
 - [ ] consider moving from react-router-dom (for compatibility) to react-router/dom (current) or react-router (current)
-- [ ] set up an autoformatter
+- [x] set up an autoformatter
 - [ ] add fork note to consider removing public access to /register
 - [ ] make sure register page is consistent in its wording and usage whether its public or private to register an account
 - [ ] consider why /login and /register are outside Layout and if they might needd their own layuout/navbar
