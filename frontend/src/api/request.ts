@@ -1,6 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL;
+import { getStoredToken } from "../auth/authStorage";
 
-console.log("API URL:", API_URL);
+const API_URL = import.meta.env.VITE_API_URL;
 
 if (!API_URL) {
   throw new Error("VITE_API_URL is not configured");
@@ -26,8 +26,7 @@ export async function apiRequest<T>(
   path: string,
   options: ApiRequestOptions = {},
 ): Promise<T> {
-  const token = localStorage.getItem("access_token");
-
+  const token = getStoredToken();
   const headers = new Headers(options.headers);
 
   headers.set("Accept", "application/json");

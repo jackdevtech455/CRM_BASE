@@ -48,7 +48,7 @@
 
 ## api/apiFetch.ts and api/client/ts
 
-- [ ] remove these and wire in /api/request.ts
+- [x] remove these and wire in /api/request.ts
 
 
 ## api/clients.ts
