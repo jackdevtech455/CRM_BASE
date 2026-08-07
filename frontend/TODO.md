@@ -11,6 +11,7 @@
 - [ ] rewrite dependecy install instructions so it can be done from host or from container
 - [ ] consider removing the COPY of package.json and pnpm lock file in Dockerfile as they are bind mounted
 - [ ] consider removing the COPY . . in Dockerfile as bind mounted
+- [ ] consider changing .vscode settings to .editorconfig to be editor agnostic
 
 ## router.tsx
 
