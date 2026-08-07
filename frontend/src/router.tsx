@@ -9,34 +9,34 @@ import RegisterPage from "./pages/RegisterPage";
 import TicketsPage from "./pages/TicketsPage";
 
 export const router = createBrowserRouter([
-    {
-        path: "/login",
-        element: <LoginPage />,
-    },
-    {
-        path: "/register",
-        element: <RegisterPage />,
-    },
-    {
-        element: <ProtectedRoute />,
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <Layout />,
         children: [
-            {
-                element: <Layout />,
-                children: [
-                    {
-                        path: "/",
-                        element: <DashboardPage />,
-                    },
-                    {
-                        path: "/clients",
-                        element: <ClientsPage />,
-                    },
-                    {
-                        path: "/tickets",
-                        element: <TicketsPage />,
-                    },
-                ],
-            },
+          {
+            path: "/",
+            element: <DashboardPage />,
+          },
+          {
+            path: "/clients",
+            element: <ClientsPage />,
+          },
+          {
+            path: "/tickets",
+            element: <TicketsPage />,
+          },
         ],
-    },
+      },
+    ],
+  },
 ]);

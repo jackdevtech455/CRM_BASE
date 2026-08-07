@@ -4,108 +4,106 @@ import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api/auth";
 
 export default function RegisterPage() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordConfirmation, setPasswordConfirmation] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
-        setError(null);
+    setError(null);
 
-        if (password !== passwordConfirmation) {
-            setError("Passwords do not match");
-            return;
-        }
-
-        setIsSubmitting(true);
-
-        try {
-            await register({
-                name,
-                email,
-                password,
-            });
-
-            navigate("/login", {
-                replace: true,
-                state: {
-                    message: "Account created successfully. You can now log in.",
-                },
-            });
-        } catch (error) {
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : "Unable to create your account",
-            );
-        } finally {
-            setIsSubmitting(false);
-        }
+    if (password !== passwordConfirmation) {
+      setError("Passwords do not match");
+      return;
     }
 
-    return (
-        <main>
-            <h1>Create an account</h1>
+    setIsSubmitting(true);
 
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Name
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(event) => setName(event.target.value)}
-                        required
-                    />
-                </label>
+    try {
+      await register({
+        name,
+        email,
+        password,
+      });
 
-                <label>
-                    Email
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        required
-                    />
-                </label>
+      navigate("/login", {
+        replace: true,
+        state: {
+          message: "Account created successfully. You can now log in.",
+        },
+      });
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Unable to create your account",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
-                <label>
-                    Password
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        required
-                    />
-                </label>
+  return (
+    <main>
+      <h1>Create an account</h1>
 
-                <label>
-                    Confirm password
-                    <input
-                        type="password"
-                        value={passwordConfirmation}
-                        onChange={(event) =>
-                            setPasswordConfirmation(event.target.value)
-                        }
-                        required
-                    />
-                </label>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name
+          <input
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            required
+          />
+        </label>
 
-                {error && <p role="alert">{error}</p>}
+        <label>
+          Email
+          <input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
+        </label>
 
-                <button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? "Creating account..." : "Create account"}
-                </button>
-            </form>
+        <label>
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
+        </label>
 
-            <p>
-                Already have an account? <Link to="/login">Log in</Link>
-            </p>
-        </main>
-    );
+        <label>
+          Confirm password
+          <input
+            type="password"
+            value={passwordConfirmation}
+            onChange={(event) => setPasswordConfirmation(event.target.value)}
+            required
+          />
+        </label>
+
+        {error && <p role="alert">{error}</p>}
+
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Creating account..." : "Create account"}
+        </button>
+      </form>
+
+      <p>
+        Already have an account? <Link to="/login">Log in</Link>
+      </p>
+    </main>
+  );
 }

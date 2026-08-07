@@ -6,7 +6,6 @@ import { AuthProvider } from "./auth/AuthProvider";
 import "./index.css";
 import { router } from "./router";
 
-
 const queryClient = new QueryClient();
 
 const rootElement = document.getElementById("root");

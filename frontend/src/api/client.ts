@@ -3,74 +3,72 @@ const API_URL = import.meta.env.VITE_API_URL;
 console.log("API URL:", API_URL);
 
 if (!API_URL) {
-    throw new Error("VITE_API_URL is not configured");
+  throw new Error("VITE_API_URL is not configured");
 }
 
 type ApiRequestOptions = Omit<RequestInit, "body"> & {
-    body?: unknown;
+  body?: unknown;
 };
 
 export class ApiError extends Error {
-    status: number;
-    data: unknown;
+  status: number;
+  data: unknown;
 
-    constructor(status: number, message: string, data: unknown) {
-        super(message);
-        this.name = "ApiError";
-        this.status = status;
-        this.data = data;
-    }
+  constructor(status: number, message: string, data: unknown) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.data = data;
+  }
 }
 
 export async function apiRequest<T>(
-    path: string,
-    options: ApiRequestOptions = {},
+  path: string,
+  options: ApiRequestOptions = {},
 ): Promise<T> {
-    const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token");
 
-    const headers = new Headers(options.headers);
+  const headers = new Headers(options.headers);
 
-    headers.set("Accept", "application/json");
+  headers.set("Accept", "application/json");
 
-    if (options.body !== undefined) {
-        headers.set("Content-Type", "application/json");
+  if (options.body !== undefined) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  const response = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers,
+    body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+  });
+
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  const contentType = response.headers.get("content-type");
+  const isJson = contentType?.includes("application/json");
+
+  const data: unknown = isJson ? await response.json() : await response.text();
+
+  if (!response.ok) {
+    let message = `Request failed with status ${response.status}`;
+
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "detail" in data &&
+      typeof data.detail === "string"
+    ) {
+      message = data.detail;
     }
 
-    if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-    }
+    throw new ApiError(response.status, message, data);
+  }
 
-    const response = await fetch(`${API_URL}${path}`, {
-        ...options,
-        headers,
-        body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
-    });
-
-    if (response.status === 204) {
-        return undefined as T;
-    }
-
-    const contentType = response.headers.get("content-type");
-    const isJson = contentType?.includes("application/json");
-
-    const data: unknown = isJson
-        ? await response.json()
-        : await response.text();
-
-    if (!response.ok) {
-        let message = `Request failed with status ${response.status}`;
-
-        if (
-            typeof data === "object" &&
-            data !== null &&
-            "detail" in data &&
-            typeof data.detail === "string"
-        ) {
-            message = data.detail;
-        }
-
-        throw new ApiError(response.status, message, data);
-    }
-
-    return data as T;
+  return data as T;
 }
