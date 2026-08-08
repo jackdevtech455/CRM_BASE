@@ -14,6 +14,7 @@ import {
   type LoginCredentials,
   type User,
 } from "../api/auth";
+import { getStoredToken, removeStoredToken, storeToken } from "./authStorage";
 
 type AuthContextValue = {
   user: User | null;
@@ -34,14 +35,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   const logout = useCallback(() => {
-    localStorage.removeItem("access_token");
+    removeStoredToken();
     setUser(null);
   }, []);
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     const tokenResponse = await loginRequest(credentials);
 
-    localStorage.setItem("access_token", tokenResponse.access_token);
+    storeToken(tokenResponse.access_token);
 
     try {
       const currentUser = await getCurrentUser();
@@ -54,7 +55,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     async function restoreSession() {
-      const token = localStorage.getItem("access_token");
+      const token = getStoredToken();
 
       if (!token) {
         setIsLoading(false);

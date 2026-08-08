@@ -46,11 +46,11 @@
         throw error;
     }
     add logout dependency to login in useCallback
-- [ ] use token storage helper funcs in place of calls to `localstorage`
+- [x] use token storage helper funcs in place of calls to `localstorage`
 
 ## auth/authStorage.ts
 
-- [ ] use these helper functions instead of `localstorage.getItem("access_token")` for example
+- [x] use these helper functions instead of `localstorage.getItem("access_token")` for example
 
 ## api/apiFetch.ts and api/client/ts
 

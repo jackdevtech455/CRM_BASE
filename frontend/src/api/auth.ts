@@ -1,3 +1,5 @@
+import { getStoredToken } from "../auth/authStorage";
+
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 export type LoginCredentials = {
@@ -46,7 +48,7 @@ export async function login(
 }
 
 export async function getCurrentUser(): Promise<User> {
-  const token = localStorage.getItem("access_token");
+  const token = getStoredToken();
 
   if (!token) {
     throw new Error("No access token available");
