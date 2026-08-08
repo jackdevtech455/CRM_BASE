@@ -47,8 +47,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const currentUser = await getCurrentUser();
       setUser(currentUser);
     } catch (error) {
-      localStorage.removeItem("access_token");
-      setUser(null);
+      logout();
       throw error;
     }
   }, []);

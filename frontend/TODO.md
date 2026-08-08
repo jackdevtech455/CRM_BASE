@@ -34,7 +34,7 @@
 
 - [x] remove refreshUser from AuthProvider as it is not used anywhere
     - [x] ensure removed from `value`
-- [ ] swap access token deletion and setUSer(null) with logout()
+- [x] swap access token deletion and setUSer(null) with logout()
     catch (error) {
         logout();
         throw error;
