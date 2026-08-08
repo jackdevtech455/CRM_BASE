@@ -21,7 +21,6 @@ type AuthContextValue = {
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
-  refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -38,22 +37,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem("access_token");
     setUser(null);
   }, []);
-
-  const refreshUser = useCallback(async () => {
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      setUser(null);
-      return;
-    }
-
-    try {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-    } catch {
-      logout();
-    }
-  }, [logout]);
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     const tokenResponse = await loginRequest(credentials);
@@ -99,9 +82,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isLoading,
       login,
       logout,
-      refreshUser,
     }),
-    [user, isLoading, login, logout, refreshUser],
+    [user, isLoading, login, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

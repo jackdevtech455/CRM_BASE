@@ -32,8 +32,8 @@
 
 ## auth/AuthProvider.tsx
 
-- [ ] remove refreshUser from AuthContextValue as it is not used anywhere
-    - [ ] ensure removed from `value`
+- [x] remove refreshUser from AuthProvider as it is not used anywhere
+    - [x] ensure removed from `value`
 - [ ] swap access token deletion and setUSer(null) with logout()
     catch (error) {
         logout();
