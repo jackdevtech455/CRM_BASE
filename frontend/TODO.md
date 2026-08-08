@@ -17,23 +17,29 @@
 
 - [ ] consider using relative routes (like 'clients') in router.tsx isntead of absolute ones (like '/clients')
 - [ ] consider adding default root instead of React's default like:
-    ```js
-    {
-        path: "*",
-        element: <NotFoundPage />,
-    }
-    ```
-    - [ ] consider if catchall is inside or outside of auth
+
+  ```js
+  {
+    path: "*",
+    element: <NotFoundPage />,
+  }
+  ```
+
+  - [ ] consider if catchall is inside or outside of auth
 
 ## auth/ProtctedRoute.tsx
 
 - [ ] consider state={{ from=location }} instead of location.pathname - this should preserve url params, hashes and other state when returning you after login
-- [ ] consider adding basic demo component instead of just '<p>Loading...</p>'
+- [ ] consider adding basic demo component instead of just:
+
+  ```html
+  <p>Loading...</p>
+  ```
 
 ## auth/AuthProvider.tsx
 
 - [x] remove refreshUser from AuthProvider as it is not used anywhere
-    - [x] ensure removed from `value`
+  - [x] ensure removed from `value`
 - [x] swap access token deletion and setUSer(null) with logout()
     catch (error) {
         logout();
@@ -50,7 +56,6 @@
 
 - [x] remove these and wire in /api/request.ts
 
-
 ## api/clients.ts
 
 - [ ] fix imports for /api/request.ts
@@ -60,20 +65,24 @@
 ## api/auth.ts
 
 - [ ] replace body of `getCurrentUser` with the apiRequest helper:
-```js
-export function getCurrentUser(): Promise<User> {
-  return apiRequest<User>("/auth/me");
-}
-```
+
+  ```js
+  export function getCurrentUser(): Promise<User> {
+    return apiRequest<User>("/auth/me");
+  }
+  ```
+
 - [ ] replace body of `register` with the apiRequest helper:
-```js
-export function register(
-  credentials: RegisterCredentials,
-): Promise<User> {
-  return apiRequest<User>("/auth/register", {
-    method: "POST",
-    body: credentials,
-  });
-}
-```
-    - [ ] consider that logged-in users would now send their token to the register endpoint
+
+  ```js
+  export function register(
+    credentials: RegisterCredentials,
+  ): Promise<User> {
+    return apiRequest<User>("/auth/register", {
+      method: "POST",
+      body: credentials,
+    });
+  }
+  ```
+
+  - [ ] consider that logged-in users would now send their token to the register endpoint
