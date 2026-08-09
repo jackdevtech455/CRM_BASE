@@ -2,34 +2,34 @@ import { useState } from "react";
 import { apiRequest } from "../api/client";
 
 export default function TicketsPage() {
-    const [result, setResult] = useState<unknown>(null);
-    const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<unknown>(null);
+  const [error, setError] = useState<string | null>(null);
 
-    async function loadTickets() {
-        try {
-            setError(null);
+  async function loadTickets() {
+    try {
+      setError(null);
 
-            const data = await apiRequest<unknown>("/api/tickets");
+      const data = await apiRequest<unknown>("/api/tickets");
 
-            setResult(data);
-        } catch (error) {
-            setError(
-                error instanceof Error ? error.message : "An unknown error occurred",
-            );
-        }
+      setResult(data);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "An unknown error occurred",
+      );
     }
+  }
 
-    return (
-        <main>
-            <h1>Tickets</h1>
+  return (
+    <main>
+      <h1>Tickets</h1>
 
-            <button type="button" onClick={loadTickets}>
-                Load tickets
-            </button>
+      <button type="button" onClick={loadTickets}>
+        Load tickets
+      </button>
 
-            {error && <p>{error}</p>}
+      {error && <p>{error}</p>}
 
-            {result !== null && <pre>{JSON.stringify(result, null, 2)}</pre>}
-        </main>
-    );
+      {result !== null && <pre>{JSON.stringify(result, null, 2)}</pre>}
+    </main>
+  );
 }
