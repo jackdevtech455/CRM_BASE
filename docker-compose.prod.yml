@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: crm-db
+    environment:
+      POSTGRES_DB: crm
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: crm
+    expose:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    image: ghcr.io/jackdevtech455/crm_base-backend:latest
+    container_name: crm-backend
+    environment:
+      DATABASE_URL: postgresql://crm:$crm@crm-db:5432/crm
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    image: ghcr.io/jackdevtech455/crm_base-frontend:latest
+    container_name: crm-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
