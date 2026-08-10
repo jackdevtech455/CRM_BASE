@@ -1,0 +1,7 @@
+.venv
+
+.git
+.gitignore
+
+.env
+.env.*
