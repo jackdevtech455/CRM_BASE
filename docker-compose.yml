@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
     container_name: crm-backend
     env_file:
-      - .env
+      - ./backend/.env
     environment:
       DATABASE_URL: postgresql://crm:crm@crm-db:5432/crm
     ports:
@@ -38,7 +38,7 @@ services:
       - frontend_node_modules:/app/node_modules
       - frontend_pnpm_store:/pnpm/store
     env_file:
-      - .env
+      - ./frontend/.env
     environment:
       VITE_API_URL: http://localhost:8000
       PNPM_STORE_DIR: /pnpm/store
