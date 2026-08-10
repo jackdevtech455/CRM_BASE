@@ -28,4 +28,3 @@ dist-ssr
 
 # Env files
 .env
-.env.*
