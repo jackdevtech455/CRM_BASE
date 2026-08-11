@@ -81,5 +81,5 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd /opt/crm-base
-            docker-compose -f docker-compose.prod.yml pull
-            docker-compose -f docker-compose.prod.yml up -d
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d
