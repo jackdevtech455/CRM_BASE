@@ -70,7 +70,7 @@ jobs:
           key: ${{ secrets.SERVER_DEPLOY_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           source: "docker-compose.prod.yml"
-          target: "/opt/crm-base/docker-compose.prod.yml"
+          target: "/opt/crm-base/"
 
       - name: Deploy containers
         uses: appleboy/ssh-action@v1
