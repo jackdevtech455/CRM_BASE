@@ -13,20 +13,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AuthSettings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_prefix="AUTH_",
-    )
-
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int
 
 
 class DatabaseSettings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_prefix="DATABASE_",
-    )
-
     url: str
 
 
