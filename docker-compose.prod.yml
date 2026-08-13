@@ -2,6 +2,7 @@ services:
   db:
     image: postgres:16-alpine
     container_name: crm-db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: crm
       POSTGRES_USER: crm
@@ -14,8 +15,9 @@ services:
   backend:
     image: ghcr.io/jackdevtech455/crm_base-backend:latest
     container_name: crm-backend
-    environment:
-      DATABASE_URL: postgresql://crm:$crm@crm-db:5432/crm
+    restart: unless-stopped
+    env_file:
+      - .env.backend
     ports:
       - "8000:8000"
     depends_on:
@@ -26,8 +28,8 @@ services:
     container_name: crm-frontend
     ports:
       - "5173:5173"
-    environment:
-      VITE_API_URL: http://localhost:8000
+    env_file:
+      - .env.frontend
     depends_on:
       - backend
 
