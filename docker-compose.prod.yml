@@ -11,6 +11,8 @@ services:
       - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
 
   backend:
     image: ghcr.io/jackdevtech455/crm_base-backend:latest
@@ -20,6 +22,9 @@ services:
       - .env.backend
     ports:
       - "8000:8000"
+    networks:
+      - internal
+      - proxy
     depends_on:
       - db
 
@@ -30,8 +35,16 @@ services:
       - "5173:5173"
     env_file:
       - .env.frontend
+    networks:
+      - proxy
     depends_on:
       - backend
 
 volumes:
   postgres_data:
+
+networks:
+  internal:
+    internal: true
+  proxy:
+    external: true
