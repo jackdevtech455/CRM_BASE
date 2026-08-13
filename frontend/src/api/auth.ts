@@ -1,6 +1,5 @@
 import { getStoredToken } from "../auth/authStorage";
-
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+import { API_BASE_URL } from "./request";
 
 export type LoginCredentials = {
   email: string;
@@ -28,7 +27,7 @@ export async function login(
   formData.set("username", credentials.email);
   formData.set("password", credentials.password);
 
-  const response = await fetch(`${API_URL}/auth/login`, {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -54,7 +53,7 @@ export async function getCurrentUser(): Promise<User> {
     throw new Error("No access token available");
   }
 
-  const response = await fetch(`${API_URL}/auth/me`, {
+  const response = await fetch(`${API_BASE_URL}/auth/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -76,7 +75,7 @@ export type RegisterCredentials = {
 export async function register(
   credentials: RegisterCredentials,
 ): Promise<User> {
-  const response = await fetch(`${API_URL}/auth/register`, {
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -1,10 +1,6 @@
 import { getStoredToken } from "../auth/authStorage";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
-if (!API_URL) {
-  throw new Error("VITE_API_URL is not configured");
-}
+export const API_BASE_URL = "/api";
 
 type ApiRequestOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
@@ -39,7 +35,7 @@ export async function apiRequest<T>(
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(`${API_URL}${path}`, {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers,
     body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
