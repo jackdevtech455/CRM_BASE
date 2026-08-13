@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { apiRequest } from "../api/client";
+import { apiRequest } from "../api/request";
 
 export default function DashboardPage() {
   const [result, setResult] = useState<unknown>(null);
