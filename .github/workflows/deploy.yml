@@ -82,4 +82,5 @@ jobs:
           script: |
             cd /opt/crm-base
             docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml run --rm backend uv run alembic upgrade head
             docker compose -f docker-compose.prod.yml up -d
