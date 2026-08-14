@@ -20,8 +20,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env.backend
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     networks:
       - internal
       - proxy
@@ -31,8 +31,8 @@ services:
   frontend:
     image: ghcr.io/jackdevtech455/crm_base-frontend:latest
     container_name: crm-frontend
-    ports:
-      - "5173:5173"
+    expose:
+      - "5173"
     env_file:
       - .env.frontend
     networks:
