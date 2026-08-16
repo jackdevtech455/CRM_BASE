@@ -9,7 +9,7 @@ export default function TicketsPage() {
     try {
       setError(null);
 
-      const data = await apiRequest<unknown>("tickets");
+      const data = await apiRequest<unknown>("/tickets");
 
       setResult(data);
     } catch (error) {
