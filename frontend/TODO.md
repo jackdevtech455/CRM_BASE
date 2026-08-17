@@ -146,7 +146,7 @@ const from =
 
 ## DashboardPage.tsx
 
-- [ ] replace useState with Tanstack query
+- [x] replace useState with Tanstack query
 - [x] add type for dashboard response in types/dashboard.ts:
 
 ```ts
@@ -168,7 +168,7 @@ export function getDashboard(): Promise<Dashboard> {
 }
 ```
 
-- [ ] reduce complexity of main page to something like:
+- [x] reduce complexity of main page to something like:
 
 ```ts
 <>
@@ -185,8 +185,8 @@ export function getDashboard(): Promise<Dashboard> {
 </>
 ```
 
-- [ ] ensure `<main>` is replaced with <>
-- [ ] add tanstack query like:
+- [x] ensure `<main>` is replaced with <>
+- [x] add tanstack query like:
 
 ```ts
 import { useQuery } from "@tanstack/react-query";
@@ -219,6 +219,10 @@ export default function DashboardPage() {
   );
 }
 ```
+
+- [ ] ensure dashboard const can not be undefined
+
+## ClientsPage.tsx
 
 - [ ] add tanstack to ClientsPage.tsx like:
 

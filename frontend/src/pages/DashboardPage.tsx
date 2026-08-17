@@ -1,35 +1,31 @@
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getDashboard } from "../api/dashboard";
 
 export default function DashboardPage() {
-  const [result, setResult] = useState<unknown>(null);
-  const [error, setError] = useState<string | null>(null);
+  const dashboardQuery = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: getDashboard,
+  });
 
-  async function testApi() {
-    try {
-      setError(null);
-
-      const data = await getDashboard();
-
-      setResult(data);
-    } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "An unknown error occurred",
-      );
-    }
+  if (dashboardQuery.isLoading) {
+    return <p>Loading dashboard...</p>;
   }
 
+  if (dashboardQuery.isError) {
+    return <p>{dashboardQuery.error.message}</p>;
+  }
+
+  const dashboard = dashboardQuery.data;
+
   return (
-    <main>
+    <>
       <h1>Dashboard</h1>
-
-      <button type="button" onClick={testApi}>
-        Test dashboard API
-      </button>
-
-      {error && <p>{error}</p>}
-
-      {result !== null && <pre>{JSON.stringify(result, null, 2)}</pre>}
-    </main>
+      <p>Clients: {dashboard.client_count}</p>
+      <p>Tickets: {dashboard.ticket_count}</p>
+      <h2>Recent clients</h2>
+      ...
+      <h2>Recent tickets</h2>
+      ...
+    </>
   );
 }
