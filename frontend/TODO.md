@@ -147,7 +147,7 @@ const from =
 ## DashboardPage.tsx
 
 - [ ] replace useState with Tanstack query
-- [ ] add type for dashboard response in types/dashboard.ts:
+- [x] add type for dashboard response in types/dashboard.ts:
 
 ```ts
 export type Dashboard = {
