@@ -66,7 +66,7 @@
 
 - [ ] replace body of `getCurrentUser` with the apiRequest helper:
 
-  ```js
+  ```ts
   export function getCurrentUser(): Promise<User> {
     return apiRequest<User>("/auth/me");
   }
@@ -74,7 +74,7 @@
 
 - [ ] replace body of `register` with the apiRequest helper:
 
-  ```js
+  ```ts
   export function register(
     credentials: RegisterCredentials,
   ): Promise<User> {
@@ -86,3 +86,308 @@
   ```
 
   - [ ] consider that logged-in users would now send their token to the register endpoint
+
+## pages/LoginPage.tsx
+
+- [ ] make use of from location after login, change:
+
+```ts
+navigate("/", { replace: true });
+```
+
+to:
+
+```ts
+const location = useLocation();
+const navigate = useNavigate();
+
+const from = location.state?.from ?? "/";
+
+navigate(from, { replace: true });
+```
+
+if typing issues try:
+
+```ts
+const location = useLocation();
+const from =
+  typeof location.state?.from === "string"
+    ? location.state.from
+    : "/";
+```
+
+## layout.tsx
+
+- [ ] remove 'Create Account' block and link register page from login page:
+
+```ts
+<Link to="/register">Create an account</Link>
+```
+
+- [ ] remove inline styles, change to:
+
+```ts
+<nav>
+  <Link to="/">Dashboard</Link>
+  <Link to="/clients">Clients</Link>
+  <Link to="/tickets">Tickets</Link>
+
+  <span>
+    {user?.name} ({user?.email})
+  </span>
+
+  <LogoutButton />
+</nav>
+```
+
+## LogoutButton.tsx
+
+- [ ] clear user tanstack query cache on logout
+
+## DashboardPage.tsx
+
+- [ ] replace useState with Tanstack query
+- [ ] add type for dashboard response in types/dashboard.ts:
+
+```ts
+export type Dashboard = {
+  client_count: number;
+  ticket_count: number;
+  recent_clients: Client[];
+  recent_tickets: Ticket[];
+};
+```
+
+- [ ] change `apiRequest<unknown>("/dashboard");` to `Dashboard` type from api/dashboard.ts as:
+
+```ts
+import { apiRequest } from "./request";
+
+export function getDashboard(): Promise<Dashboard> {
+  return apiRequest<Dashboard>("/api/dashboard");
+}
+```
+
+- [ ] reduce complexity of main page to something like:
+
+```ts
+<>
+  <h1>Dashboard</h1>
+
+  <p>Clients: {dashboard.client_count}</p>
+  <p>Tickets: {dashboard.ticket_count}</p>
+
+  <h2>Recent clients</h2>
+  ...
+
+  <h2>Recent tickets</h2>
+  ...
+</>
+```
+
+- [ ] ensure `<main>` is replaced with <>
+- [ ] add tanstack query like:
+
+```ts
+import { useQuery } from "@tanstack/react-query";
+
+import { getDashboard } from "../api/dashboard";
+
+export default function DashboardPage() {
+  const dashboardQuery = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: getDashboard,
+  });
+
+  if (dashboardQuery.isPending) {
+    return <p>Loading dashboard...</p>;
+  }
+
+  if (dashboardQuery.isError) {
+    return <p>{dashboardQuery.error.message}</p>;
+  }
+
+  const dashboard = dashboardQuery.data;
+
+  return (
+    <>
+      <h1>Dashboard</h1>
+
+      <p>Clients: {dashboard.client_count}</p>
+      <p>Tickets: {dashboard.ticket_count}</p>
+    </>
+  );
+}
+```
+
+- [ ] add tanstack to ClientsPage.tsx like:
+
+```ts
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+
+import {
+  createClient,
+  deleteClient,
+  getClients,
+  updateClient,
+} from "../api/clients";
+
+export default function ClientsPage() {
+  const queryClient = useQueryClient();
+
+  const clientsQuery = useQuery({
+    queryKey: ["clients"],
+    queryFn: getClients,
+  });
+
+  const createClientMutation = useMutation({
+    mutationFn: createClient,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ["clients"],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
+      });
+    },
+  });
+
+  const updateClientMutation = useMutation({
+    mutationFn: ({
+      clientId,
+      data,
+    }: {
+      clientId: number;
+      data: ClientUpdate;
+    }) => updateClient(clientId, data),
+
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ["clients"],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
+      });
+    },
+  });
+
+  const deleteClientMutation = useMutation({
+    mutationFn: deleteClient,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ["clients"],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
+      });
+    },
+  });
+
+  // render...
+}
+```
+
+- [ ] simplify list display like:
+
+```ts
+if (clientsQuery.isPending) {
+  return <p>Loading clients...</p>;
+}
+
+if (clientsQuery.isError) {
+  return <p>{clientsQuery.error.message}</p>;
+}
+
+const clients = clientsQuery.data;
+
+if (clients.length === 0) {
+  return (
+    <>
+      <h1>Clients</h1>
+      <p>No clients yet.</p>
+    </>
+  );
+}
+```
+and
+```ts
+<ul>
+  {clients.map((client) => (
+    <li key={client.id}>
+      {client.name}
+    </li>
+  ))}
+</ul>
+```
+
+- [ ] use mutateAsync like:
+
+```ts
+await createClientMutation.mutateAsync(data);
+```
+
+## TicketsPage.tsx
+
+- [ ] use tanstack like:
+
+```ts
+const queryClient = useQueryClient();
+
+const ticketsQuery = useQuery({
+  queryKey: ["tickets"],
+  queryFn: getTickets,
+});
+
+const createTicketMutation = useMutation({
+  mutationFn: createTicket,
+  onSuccess: () => {
+    void queryClient.invalidateQueries({
+      queryKey: ["tickets"],
+    });
+
+    void queryClient.invalidateQueries({
+      queryKey: ["dashboard"],
+    });
+  },
+});
+
+const updateTicketMutation = useMutation({
+  mutationFn: ({
+    ticketId,
+    data,
+  }: {
+    ticketId: number;
+    data: TicketUpdate;
+  }) => updateTicket(ticketId, data),
+
+  onSuccess: () => {
+    void queryClient.invalidateQueries({
+      queryKey: ["tickets"],
+    });
+
+    void queryClient.invalidateQueries({
+      queryKey: ["dashboard"],
+    });
+  },
+});
+
+const deleteTicketMutation = useMutation({
+  mutationFn: deleteTicket,
+  onSuccess: () => {
+    void queryClient.invalidateQueries({
+      queryKey: ["tickets"],
+    });
+
+    void queryClient.invalidateQueries({
+      queryKey: ["dashboard"],
+    });
+  },
+});
+```
