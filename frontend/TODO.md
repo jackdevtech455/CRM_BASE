@@ -158,7 +158,7 @@ export type Dashboard = {
 };
 ```
 
-- [ ] change `apiRequest<unknown>("/dashboard");` to `Dashboard` type from api/dashboard.ts as:
+- [x] change `apiRequest<unknown>("/dashboard");` to `Dashboard` type from api/dashboard.ts as:
 
 ```ts
 import { apiRequest } from "./request";

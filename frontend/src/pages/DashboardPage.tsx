@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { apiRequest } from "../api/request";
+import { getDashboard } from "../api/dashboard";
 
 export default function DashboardPage() {
   const [result, setResult] = useState<unknown>(null);
@@ -9,7 +9,7 @@ export default function DashboardPage() {
     try {
       setError(null);
 
-      const data = await apiRequest<unknown>("/dashboard");
+      const data = await getDashboard();
 
       setResult(data);
     } catch (error) {
