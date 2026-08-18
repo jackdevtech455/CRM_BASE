@@ -12,7 +12,7 @@ export function getClient(clientId: number): Promise<Client> {
 export function createClient(data: ClientCreate): Promise<Client> {
   return apiRequest<Client>("/clients", {
     method: "POST",
-    body: JSON.stringify(data),
+    body: data,
   });
 }
 
@@ -22,7 +22,7 @@ export function updateClient(
 ): Promise<Client> {
   return apiRequest<Client>(`/clients/${clientId}`, {
     method: "PATCH",
-    body: JSON.stringify(data),
+    body: data,
   });
 }
 
