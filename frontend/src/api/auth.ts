@@ -1,5 +1,5 @@
 import { getStoredToken } from "../auth/authStorage";
-import { API_BASE_URL } from "./request";
+import { API_BASE_URL, apiRequest } from "./request";
 
 export type LoginCredentials = {
   email: string;
@@ -72,24 +72,9 @@ export type RegisterCredentials = {
   password: string;
 };
 
-export async function register(
-  credentials: RegisterCredentials,
-): Promise<User> {
-  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+export function register(credentials: RegisterCredentials): Promise<User> {
+  return apiRequest<User>("/auth/register", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
+    body: credentials,
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-
-    throw new Error(
-      errorData?.detail ?? `Registration failed with status ${response.status}`,
-    );
-  }
-
-  return response.json() as Promise<User>;
 }
