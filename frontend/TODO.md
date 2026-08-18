@@ -220,7 +220,7 @@ export default function DashboardPage() {
 }
 ```
 
-- [ ] ensure dashboard const can not be undefined
+- [x] ensure dashboard const can not be undefined
 
 ## ClientsPage.tsx
 

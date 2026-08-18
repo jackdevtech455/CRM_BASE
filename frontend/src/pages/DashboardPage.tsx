@@ -7,7 +7,7 @@ export default function DashboardPage() {
     queryFn: getDashboard,
   });
 
-  if (dashboardQuery.isLoading) {
+  if (dashboardQuery.isPending) {
     return <p>Loading dashboard...</p>;
   }
 
