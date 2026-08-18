@@ -1,9 +1,10 @@
 import { useState, type SubmitEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthProvider";
 
 export default function LoginPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -11,6 +12,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const message =
+    typeof location.state?.message === "string" ? location.state.message : null;
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -35,6 +39,8 @@ export default function LoginPage() {
   return (
     <main>
       <h1>Log in</h1>
+
+      {message && <p role="alert">{message}</p>}
 
       <form onSubmit={handleSubmit}>
         <label>
