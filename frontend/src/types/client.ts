@@ -20,6 +20,7 @@ export type ClientCreate = {
 export type ClientUpdate = {
   name?: string | null;
   email?: string | null;
+  contact_name?: string | null;
   phone?: string | null;
   status?: string | null;
 };

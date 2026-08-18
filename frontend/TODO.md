@@ -224,7 +224,7 @@ export default function DashboardPage() {
 
 ## ClientsPage.tsx
 
-- [ ] add tanstack to ClientsPage.tsx like:
+- [x] add tanstack to ClientsPage.tsx like:
 
 ```ts
 import {
@@ -298,7 +298,7 @@ export default function ClientsPage() {
 }
 ```
 
-- [ ] simplify list display like:
+- [x] simplify list display like:
 
 ```ts
 if (clientsQuery.isPending) {

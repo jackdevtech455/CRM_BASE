@@ -39,14 +39,16 @@ export default function ClientsPage() {
 
   const createMutation = useMutation({
     mutationFn: createClient,
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: ["clients"],
-      });
 
-      void queryClient.invalidateQueries({
-        queryKey: ["dashboard"],
-      });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["clients"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["dashboard"],
+        }),
+      ]);
 
       setFormData(emptyForm);
     },
@@ -61,14 +63,15 @@ export default function ClientsPage() {
       data: ClientUpdate;
     }) => updateClient(clientId, data),
 
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: ["clients"],
-      });
-
-      void queryClient.invalidateQueries({
-        queryKey: ["dashboard"],
-      });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["clients"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["dashboard"],
+        }),
+      ]);
 
       setEditingClient(null);
       setFormData(emptyForm);
@@ -77,32 +80,35 @@ export default function ClientsPage() {
 
   const deleteMutation = useMutation({
     mutationFn: deleteClient,
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: ["clients"],
-      });
 
-      void queryClient.invalidateQueries({
-        queryKey: ["dashboard"],
-      });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["clients"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["dashboard"],
+        }),
+      ]);
     },
   });
 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const payload: ClientCreate = {
-      name: formData.name.trim(),
-      contact_name: formData.contact_name.trim(),
-      email: formData.email.trim(),
-      phone: formData.phone.trim() || null,
-    };
-
-    if (!payload.name) {
+    if (!formData.name.trim()) {
       return;
     }
 
     if (editingClient) {
+      const payload: ClientUpdate = {
+        name: formData.name.trim(),
+        contact_name: formData.contact_name.trim(),
+        email: formData.email.trim() || null,
+        phone: formData.phone.trim() || null,
+        status: formData.status.trim() || null,
+      };
+
       updateMutation.mutate({
         clientId: editingClient.id,
         data: payload,
@@ -110,6 +116,14 @@ export default function ClientsPage() {
 
       return;
     }
+
+    const payload: ClientCreate = {
+      name: formData.name.trim(),
+      contact_name: formData.contact_name.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim() || null,
+      status: formData.status.trim() || null,
+    };
 
     createMutation.mutate(payload);
   }
@@ -144,44 +158,30 @@ export default function ClientsPage() {
   const formMutation = editingClient ? updateMutation : createMutation;
 
   if (clientsQuery.isPending) {
-    return (
-      <main className="p-6">
-        <p>Loading clients...</p>
-      </main>
-    );
+    return <p>Loading clients...</p>;
   }
 
   if (clientsQuery.isError) {
     return (
-      <main className="p-6">
-        <h1 className="text-2xl font-bold">Clients</h1>
-
-        <p className="mt-4 text-red-600">{clientsQuery.error.message}</p>
-      </main>
+      <>
+        <h1>Clients</h1>
+        <p role="alert">{clientsQuery.error.message}</p>
+      </>
     );
   }
 
   const clients = clientsQuery.data;
 
   return (
-    <main className="mx-auto max-w-5xl p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Clients</h1>
+    <>
+      <h1>Clients</h1>
 
-        <p className="mt-1 text-gray-600">
-          Create and manage your CRM clients.
-        </p>
-      </div>
+      <section>
+        <h2>{editingClient ? `Edit ${editingClient.name}` : "Add client"}</h2>
 
-      <section className="mb-10 rounded-lg border border-gray-200 p-6">
-        <h2 className="mb-4 text-xl font-semibold">
-          {editingClient ? `Edit ${editingClient.name}` : "Add client"}
-        </h2>
-
-        <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-3">
-          <label className="flex flex-col gap-1">
-            <span className="text-sm font-medium">Name</span>
-
+        <form onSubmit={handleSubmit}>
+          <label>
+            Name
             <input
               type="text"
               required
@@ -192,13 +192,11 @@ export default function ClientsPage() {
                   name: event.target.value,
                 }))
               }
-              className="rounded border border-gray-300 px-3 py-2"
             />
           </label>
 
-          <label className="flex flex-col gap-1">
-            <span className="text-sm font-medium">Contact name</span>
-
+          <label>
+            Contact name
             <input
               type="text"
               required
@@ -209,13 +207,11 @@ export default function ClientsPage() {
                   contact_name: event.target.value,
                 }))
               }
-              className="rounded border border-gray-300 px-3 py-2"
             />
           </label>
 
-          <label className="flex flex-col gap-1">
-            <span className="text-sm font-medium">Email</span>
-
+          <label>
+            Email
             <input
               type="email"
               value={formData.email}
@@ -225,13 +221,11 @@ export default function ClientsPage() {
                   email: event.target.value,
                 }))
               }
-              className="rounded border border-gray-300 px-3 py-2"
             />
           </label>
 
-          <label className="flex flex-col gap-1">
-            <span className="text-sm font-medium">Phone</span>
-
+          <label>
+            Phone
             <input
               type="tel"
               value={formData.phone}
@@ -241,106 +235,93 @@ export default function ClientsPage() {
                   phone: event.target.value,
                 }))
               }
-              className="rounded border border-gray-300 px-3 py-2"
             />
           </label>
 
-          <div className="flex gap-3 md:col-span-3">
-            <button
-              type="submit"
-              disabled={formMutation.isPending}
-              className="rounded bg-blue-600 px-4 py-2 font-medium text-white disabled:opacity-50"
-            >
-              {formMutation.isPending
-                ? "Saving..."
-                : editingClient
-                  ? "Save changes"
-                  : "Add client"}
-            </button>
+          <label>
+            Status
+            <input
+              type="text"
+              value={formData.status}
+              onChange={(event) =>
+                setFormData((current) => ({
+                  ...current,
+                  status: event.target.value,
+                }))
+              }
+            />
+          </label>
 
-            {editingClient && (
-              <button
-                type="button"
-                onClick={cancelEditing}
-                className="rounded border border-gray-300 px-4 py-2"
-              >
-                Cancel
-              </button>
-            )}
-          </div>
+          <button type="submit" disabled={formMutation.isPending}>
+            {formMutation.isPending
+              ? "Saving..."
+              : editingClient
+                ? "Save changes"
+                : "Add client"}
+          </button>
+
+          {editingClient && (
+            <button type="button" onClick={cancelEditing}>
+              Cancel
+            </button>
+          )}
 
           {formMutation.isError && (
-            <p className="text-red-600 md:col-span-3">
-              {formMutation.error.message}
-            </p>
+            <p role="alert">{formMutation.error.message}</p>
           )}
         </form>
       </section>
 
       <section>
-        <h2 className="mb-4 text-xl font-semibold">All clients</h2>
+        <h2>All clients</h2>
 
         {clients.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-gray-300 p-8 text-center">
-            <p className="text-gray-600">You have not added any clients yet.</p>
-          </div>
+          <p>No clients yet.</p>
         ) : (
-          <div className="overflow-hidden rounded-lg border border-gray-200">
-            <table className="w-full text-left">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Contact Name</th>
-                  <th className="px-4 py-3">Email</th>
-                  <th className="px-4 py-3">Phone</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Contact name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {clients.map((client) => (
+                <tr key={client.id}>
+                  <td>{client.name}</td>
+                  <td>{client.contact_name}</td>
+                  <td>{client.email ?? "—"}</td>
+                  <td>{client.phone ?? "—"}</td>
+                  <td>{client.status ?? "—"}</td>
+
+                  <td>
+                    <button type="button" onClick={() => startEditing(client)}>
+                      Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={deleteMutation.isPending}
+                      onClick={() => handleDelete(client)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
-              </thead>
-
-              <tbody className="divide-y divide-gray-200">
-                {clients.map((client) => (
-                  <tr key={client.id}>
-                    <td className="px-4 py-3 font-medium">{client.name}</td>
-
-                    <td className="px-4 py-3 font-medium">
-                      {client.contact_name}
-                    </td>
-
-                    <td className="px-4 py-3">{client.email ?? "—"}</td>
-
-                    <td className="px-4 py-3">{client.phone ?? "—"}</td>
-
-                    <td className="px-4 py-3">
-                      <div className="flex justify-end gap-2">
-                        <button
-                          type="button"
-                          onClick={() => startEditing(client)}
-                          className="rounded border border-gray-300 px-3 py-1.5 text-sm"
-                        >
-                          Edit
-                        </button>
-
-                        <button
-                          type="button"
-                          disabled={deleteMutation.isPending}
-                          onClick={() => handleDelete(client)}
-                          className="rounded bg-red-600 px-3 py-1.5 text-sm text-white disabled:opacity-50"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         )}
 
         {deleteMutation.isError && (
-          <p className="mt-4 text-red-600">{deleteMutation.error.message}</p>
+          <p role="alert">{deleteMutation.error.message}</p>
         )}
       </section>
-    </main>
+    </>
   );
 }
