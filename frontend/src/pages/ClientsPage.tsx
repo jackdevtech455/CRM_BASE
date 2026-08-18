@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { type FormEvent, useState } from "react";
+import { type SubmitEvent, useState } from "react";
 
 import {
   createClient,
@@ -14,6 +14,7 @@ type ClientFormData = {
   contact_name: string;
   email: string;
   phone: string;
+  status: string;
 };
 
 const emptyForm: ClientFormData = {
@@ -21,6 +22,7 @@ const emptyForm: ClientFormData = {
   contact_name: "",
   email: "",
   phone: "",
+  status: "",
 };
 
 export default function ClientsPage() {
@@ -37,9 +39,13 @@ export default function ClientsPage() {
 
   const createMutation = useMutation({
     mutationFn: createClient,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
         queryKey: ["clients"],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
       });
 
       setFormData(emptyForm);
@@ -55,9 +61,13 @@ export default function ClientsPage() {
       data: ClientUpdate;
     }) => updateClient(clientId, data),
 
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
         queryKey: ["clients"],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
       });
 
       setEditingClient(null);
@@ -67,20 +77,24 @@ export default function ClientsPage() {
 
   const deleteMutation = useMutation({
     mutationFn: deleteClient,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
         queryKey: ["clients"],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
       });
     },
   });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const payload: ClientCreate = {
       name: formData.name.trim(),
       contact_name: formData.contact_name.trim(),
-      email: formData.email.trim() || null,
+      email: formData.email.trim(),
       phone: formData.phone.trim() || null,
     };
 
@@ -108,6 +122,7 @@ export default function ClientsPage() {
       contact_name: client.contact_name,
       email: client.email ?? "",
       phone: client.phone ?? "",
+      status: client.status ?? "",
     });
   }
 
