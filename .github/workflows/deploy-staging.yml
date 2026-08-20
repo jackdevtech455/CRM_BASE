@@ -17,8 +17,8 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  BACKEND_IMAGE: ghcr.io/jackdevtech455/crm-base-backend
-  FRONTEND_IMAGE: ghcr.io/jackdevtech455/crm-base-frontend
+  BACKEND_IMAGE: ghcr.io/jackdevtech455/crm_base-backend
+  FRONTEND_IMAGE: ghcr.io/jackdevtech455/crm_base-frontend
   IMAGE_TAG: sha-${{ github.sha }}
 
 jobs:
