@@ -11,6 +11,7 @@ services:
       - .env.dev
     ports:
       - "8000:8000"
+    command: uv run uvicorn app.mail:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - ./backend/alembic/versions:/app/alembic/versions
 
@@ -26,7 +27,6 @@ services:
       - frontend_pnpm_store:/pnpm/store
     env_file:
       - .env.dev
-    command: uv run uvicorn app.mail:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       - backend
 
