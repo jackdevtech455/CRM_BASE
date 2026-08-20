@@ -6,7 +6,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: "0.0.0.0",
-    allowedHosts: ["crm-base.farrow-seven.network"],
+    allowedHosts: [
+      "crm-base.farrow-seven.network",
+      "staging.crm-base.farrow-seven.network",
+    ],
     proxy: {
       "/api": {
         target: "http://backend:8000",
