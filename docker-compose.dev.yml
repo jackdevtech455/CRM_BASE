@@ -1,34 +1,26 @@
+name: crm-base-dev
+
 services:
   db:
-    image: postgres:16-alpine
-    container_name: crm-db
-    environment:
-      POSTGRES_DB: crm
-      POSTGRES_USER: crm
-      POSTGRES_PASSWORD: crm
-    expose:
-      - "5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./env/dev/.env.db
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: crm-backend
     env_file:
-      - ./backend/.env
+      - ./env/dev/.env.backend
     ports:
       - "8000:8000"
+    command: uv run uvicorn app.mail:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - ./backend/alembic/versions:/app/alembic/versions
-    depends_on:
-      - db
+
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: crm-frontend
     ports:
       - "5173:5173"
     volumes:
@@ -36,11 +28,8 @@ services:
       - frontend_node_modules:/app/node_modules
       - frontend_pnpm_store:/pnpm/store
     env_file:
-      - ./frontend/.env
-    # environment:
-    #   PNPM_STORE_DIR: /pnpm/store
-    depends_on:
-      - backend
+      - ./env/dev/.env.frontend
+    command: pnpm dev --host 0.0.0.0
 
 volumes:
   postgres_data:

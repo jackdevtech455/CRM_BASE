@@ -1,14 +1,14 @@
-name: crm-base-prod
+name: crm-base-staging
 
 services:
   db:
     env_file:
-      - ./env/prod/.env.db
+      - ./env/staging/.env.db
 
   backend:
     image: ghcr.io/jackdevtech455/crm_base-backend:latest
     env_file:
-      - ./env/prod/.env.backend
+      - ./env/staging/.env.backend
     expose:
       - "8000"
     command: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
@@ -20,7 +20,7 @@ services:
     expose:
       - "5173"
     env_file:
-      - ./env/prod/.env.frontend
+      - ./env/staging/.env.frontend
     command: pnpm dev --host 0.0.0.0
     networks:
       - proxy

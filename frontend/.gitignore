@@ -25,6 +25,3 @@ dist
 dist-ssr
 *.local
 .pnpm-store/
-
-# Env files
-.env
