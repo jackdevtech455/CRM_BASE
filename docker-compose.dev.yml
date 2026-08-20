@@ -26,6 +26,7 @@ services:
       - frontend_pnpm_store:/pnpm/store
     env_file:
       - .env.dev
+    command: uv run uvicorn app.mail:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       - backend
 
