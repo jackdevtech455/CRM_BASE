@@ -27,6 +27,7 @@ services:
       - frontend_pnpm_store:/pnpm/store
     env_file:
       - .env.dev
+    command: pnpm dev --host 0.0.0.0
     depends_on:
       - backend
 
