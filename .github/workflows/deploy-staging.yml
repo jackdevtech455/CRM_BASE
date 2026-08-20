@@ -98,7 +98,7 @@ jobs:
             docker compose \
               -f docker-compose.base.yml \
               -f docker-compose.staging.yml \
-              run --rm backend alembic upgrade head
+              run --rm backend uv run alembic upgrade head
 
             docker compose \
               -f docker-compose.base.yml \
