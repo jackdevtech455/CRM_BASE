@@ -12,18 +12,18 @@ services:
     expose:
       - "8000"
     command: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
-    networks:
-      - proxy
 
   frontend:
     image: ghcr.io/jackdevtech455/crm_base-frontend:${IMAGE_TAG:?IMAGE_TAG must be set}
-    expose:
-      - "5173"
     env_file:
       - ./env/staging/.env.frontend
-    command: pnpm dev --host 0.0.0.0
+    expose:
+      - "5173"
     networks:
-      - proxy
+      proxy:
+        aliases:
+          - crm-base-staging-frontend
+    command: pnpm dev --host 0.0.0.0
 
 volumes:
   postgres_data:
