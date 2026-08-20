@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    expose:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    restart: unless-stopped
+    depends_on:
+      - db
+
+
+  frontend:
+    restart: unless-stopped
+    depends_on:
+      - backend

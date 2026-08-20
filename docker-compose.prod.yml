@@ -1,40 +1,26 @@
 services:
   db:
-    image: postgres:16-alpine
-    container_name: crm-db
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: crm
-      POSTGRES_USER: crm
-      POSTGRES_PASSWORD: crm
-    expose:
-      - "5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env.prod  # TODO make crash if not found
     networks:
       - internal
 
   backend:
     image: ghcr.io/jackdevtech455/crm_base-backend:latest
-    container_name: crm-backend
-    restart: unless-stopped
     env_file:
-      - .env.backend
+      - .env.prod
     expose:
       - "8000"
     networks:
       - internal
       - proxy
-    depends_on:
-      - db
 
   frontend:
     image: ghcr.io/jackdevtech455/crm_base-frontend:latest
-    container_name: crm-frontend
     expose:
       - "5173"
     env_file:
-      - .env.frontend
+      - .env.prod
     networks:
       - proxy
     depends_on:
