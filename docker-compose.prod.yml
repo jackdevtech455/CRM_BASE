@@ -22,7 +22,7 @@ services:
     networks:
       proxy:
         aliases:
-          - crm-base-staging-frontend
+          - crm-base-prod-frontend
     command: pnpm dev --host 0.0.0.0
 
 volumes:
