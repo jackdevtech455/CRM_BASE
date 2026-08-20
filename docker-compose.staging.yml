@@ -6,7 +6,7 @@ services:
       - ./env/staging/.env.db
 
   backend:
-    image: ghcr.io/jackdevtech455/crm_base-backend:latest
+    image: ghcr.io/jackdevtech455/crm_base-backend:${IMAGE_TAG:?IMAGE_TAG must be set}
     env_file:
       - ./env/staging/.env.backend
     expose:
@@ -16,7 +16,7 @@ services:
       - proxy
 
   frontend:
-    image: ghcr.io/jackdevtech455/crm_base-frontend:latest
+    image: ghcr.io/jackdevtech455/crm_base-frontend:${IMAGE_TAG:?IMAGE_TAG must be set}
     expose:
       - "5173"
     env_file:
