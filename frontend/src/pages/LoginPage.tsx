@@ -1,4 +1,4 @@
-import { useState, type SubmitEvent } from "react";
+import { useEffect, useState, type SubmitEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthProvider";
@@ -8,13 +8,26 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  const [message] = useState(() =>
+    typeof location.state?.message === "string" ? location.state.message : null,
+  );
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const message =
-    typeof location.state?.message === "string" ? location.state.message : null;
+  useEffect(() => {
+    if (!location.state?.message) return;
+
+    navigate(location.pathname, {
+      replace: true,
+      state: {
+        ...location.state,
+        message: undefined,
+      },
+    });
+  }, [location.pathname, location.state, navigate]);
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
