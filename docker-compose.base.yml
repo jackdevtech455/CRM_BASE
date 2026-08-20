@@ -6,14 +6,23 @@ services:
       - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app
 
   backend:
     restart: unless-stopped
+    networks:
+      - app
     depends_on:
       - db
 
 
   frontend:
     restart: unless-stopped
+    networks:
+      - app
     depends_on:
       - backend
+
+networks:
+  app:
