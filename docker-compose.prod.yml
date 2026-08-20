@@ -1,3 +1,5 @@
+name: crm-base-prod
+
 services:
   db:
     env_file:

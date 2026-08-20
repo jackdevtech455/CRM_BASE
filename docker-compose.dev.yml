@@ -1,3 +1,5 @@
+name: crm-base-dev
+
 services:
   db:
     env_file:

@@ -1,3 +1,5 @@
+name: crm-base-staging
+
 services:
   db:
     env_file:
