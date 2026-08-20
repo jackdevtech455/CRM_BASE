@@ -1,14 +1,14 @@
 services:
   db:
     env_file:
-      - .env.dev
+      - ./env/dev/.env.db
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     env_file:
-      - .env.dev
+      - ./env/dev/.env.backend
     ports:
       - "8000:8000"
     command: uv run uvicorn app.mail:app --host 0.0.0.0 --port 8000 --reload
@@ -26,7 +26,7 @@ services:
       - frontend_node_modules:/app/node_modules
       - frontend_pnpm_store:/pnpm/store
     env_file:
-      - .env.dev
+      - ./env/dev/.env.frontend
     command: pnpm dev --host 0.0.0.0
 
 volumes:
