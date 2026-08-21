@@ -51,7 +51,7 @@ export default function LoginPage() {
 
   return (
     <main>
-      <h1>Log in - Staging Change</h1>
+      <h1>Log in</h1>
 
       {message && <p role="alert">{message}</p>}
 
