@@ -48,7 +48,7 @@ jobs:
           username: ${{ secrets.PROD_DEPLOY_USER }}
           key: ${{ secrets.PROD_DEPLOY_SSH_KEY }}
           source: "docker-compose.base.yml,docker-compose.prod.yml"
-          target: "/opt/crm-base/production"
+          target: "/opt/crm-base/prod"
 
       - name: Deploy to production
         uses: appleboy/ssh-action@v1
@@ -64,7 +64,7 @@ jobs:
             set -e
 
             export IMAGE_TAG
-            cd /opt/crm-base/production
+            cd /opt/crm-base/prod
 
             docker compose \
               -f docker-compose.base.yml \
