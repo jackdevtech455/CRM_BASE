@@ -1,0 +1,94 @@
+name: Deploy production
+
+run-name: Deploy ${{ inputs.image_tag }} to production
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Exact image tag tested in staging"
+        required: true
+        type: string
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate image tag
+        env:
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          if [[ ! "$IMAGE_TAG" =~ ^sha-[0-9a-f]{40}$ ]]; then
+            echo "Invalid image tag: $IMAGE_TAG"
+            echo "Expected sha- followed by a full 40-character commit SHA."
+            exit 1
+          fi
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://crm-base.farrow-seven.network
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Copy production Compose files
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.PROD_DEPLOY_HOST }}
+          port: ${{ secrets.PROD_DEPLOY_PORT }}
+          username: ${{ secrets.PROD_DEPLOY_USER }}
+          key: ${{ secrets.PROD_DEPLOY_SSH_KEY }}
+          source: "docker-compose.base.yml,docker-compose.prod.yml"
+          target: "/opt/crm-base/production"
+
+      - name: Deploy to production
+        uses: appleboy/ssh-action@v1
+        env:
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        with:
+          host: ${{ secrets.PROD_DEPLOY_HOST }}
+          port: ${{ secrets.PROD_DEPLOY_PORT }}
+          username: ${{ secrets.PROD_DEPLOY_USER }}
+          key: ${{ secrets.PROD_DEPLOY_SSH_KEY }}
+          envs: IMAGE_TAG
+          script: |
+            set -e
+
+            export IMAGE_TAG
+            cd /opt/crm-base/production
+
+            docker compose \
+              -f docker-compose.base.yml \
+              -f docker-compose.prod.yml \
+              pull
+
+            docker compose \
+              -f docker-compose.base.yml \
+              -f docker-compose.prod.yml \
+              run --rm backend uv run alembic upgrade head
+
+            docker compose \
+              -f docker-compose.base.yml \
+              -f docker-compose.prod.yml \
+              up -d --remove-orphans
+
+      - name: Write deployment summary
+        env:
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          {
+            echo "## Production deployment complete"
+            echo
+            echo "**Image tag:** \`$IMAGE_TAG\`"
+            echo
+            echo "[Open production](https://crm-base.farrow-seven.network)"
+          } >> "$GITHUB_STEP_SUMMARY"
