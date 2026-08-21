@@ -14,6 +14,7 @@
 - [ ] consider changing .vscode settings to .editorconfig to be editor agnostic
 - [ ] move from `pnpm dev --host 0.0.0.0` to `pnpm build` on prod and staging
 - [ ] get hot reloading working
+- [ ] use multi stage dockerfile
 
 ## router.tsx
 

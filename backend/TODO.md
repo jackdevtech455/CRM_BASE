@@ -12,3 +12,4 @@
 - [X] update docs with install instructions from host>container and container>host
 - [ ] add files to dockerignore and swap to using a bind mount instead of COPY
 - [ ] get hot reloading working
+- [ ] use multi stage dockerfile
