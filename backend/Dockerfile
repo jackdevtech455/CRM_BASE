@@ -23,13 +23,15 @@ COPY /app/ ./app/
 
 RUN groupadd --system appuser \
     && useradd \
-    --system \
-    --gid appuser \
+    --create-home \
+    --home-dir /home/appuser \
     --uid 10001 \
+    --gid appuser \
+    --shell /usr/sbin/nologin \
     appuser
 
 USER appuser
 
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
