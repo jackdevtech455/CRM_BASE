@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.router import api_routers
 from app.api.routes import auth
+from app.api.routes.health import health_router
 
 app = FastAPI(
     title="CRM Backend",
@@ -30,8 +31,4 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/api/auth", tags=["api", "auth"])
 app.include_router(api_routers, prefix="/api", tags=["api"])
-
-
-@app.get("/api/health")
-def health():
-    return {"status": "ok"}
+app.include_router(health_router, prefix="/api", tags=["api"])
