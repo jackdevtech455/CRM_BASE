@@ -1,13 +1,8 @@
-from typing import TYPE_CHECKING
-
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-
-if TYPE_CHECKING:
-    from sqlalchemy.orm import Session
-
 
 health_router = APIRouter()
 
