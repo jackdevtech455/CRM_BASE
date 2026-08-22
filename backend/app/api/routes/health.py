@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 health_router = APIRouter()
 
 
-@health_router.get("/api/health")
+@health_router.get("/health")
 def health(db: Session = Depends(get_db)):
     db.execute(text("SELECT 1"))
     return {"status": "healthy"}
