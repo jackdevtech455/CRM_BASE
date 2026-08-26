@@ -17,9 +17,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --no-dev \
     --no-install-project
 
-COPY /alembic.ini ./
-COPY /alembic/ ./alembic/
-COPY /app/ ./app/
+COPY alembic.ini ./
+COPY alembic/ ./alembic/
+COPY app/ ./app/
 
 RUN groupadd --system appuser \
     && useradd \
