@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 5173
 
-CMD tail -f /dev/null
+CMD pnpm dev --host 0.0.0.0
