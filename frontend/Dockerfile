@@ -2,13 +2,17 @@ FROM node:22-slim
 
 WORKDIR /app
 
-RUN corepack enable
+RUN corepack enable \
+    && chown node:node /app
 
-COPY package.json pnpm-lock.yaml ./
+USER node
+
+COPY --chown=node:node package.json pnpm-lock.yaml ./
+
 RUN pnpm install --frozen-lockfile
 
-COPY . .
+COPY --chown=node:node . .
 
 EXPOSE 5173
 
-CMD pnpm dev --host 0.0.0.0
+CMD ["pnpm", "dev", "--host", "0.0.0.0"]
