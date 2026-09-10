@@ -43,3 +43,5 @@ This project prioritises code that is simple, idiomatic, strongly typed and easy
 ## Status
 
 The core authentication, client, ticket and dashboard flows are working. The project is currently being refined with improved testing, error handling, security checks and production hardening.
+
+changeme
