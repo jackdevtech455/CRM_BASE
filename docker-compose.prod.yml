@@ -16,6 +16,17 @@ services:
     image: ghcr.io/jackdevtech455/crm_base-frontend:${IMAGE_TAG:?IMAGE_TAG must be set}
     env_file:
       - ./env/prod/.env.frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+
+      - "traefik.http.routers.crm-prod.rule=Host(`crm-base.farrow-seven.network`)"
+      - "traefik.http.routers.crm-prod.entrypoints=websecure"
+      - "traefik.http.routers.crm-prod.tls=true"
+      - "traefik.http.routers.crm-prod.tls.certresolver=letsencrypt"
+
+      - "traefik.http.services.crm-prod.loadbalancer.server.port=5173"
+
     expose:
       - "5173"
     networks:
